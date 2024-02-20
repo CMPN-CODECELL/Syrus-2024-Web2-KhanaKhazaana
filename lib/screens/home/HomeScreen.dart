@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.w900),
         ),
         centerTitle: true,
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.deepPurple,
       ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             animationDuration: Duration(milliseconds: 50),
             selectedIndex: selectedIndex,
             indicatorColor: Colors.white60,
-            backgroundColor: Colors.purple[300],
+            backgroundColor: Colors.deepPurple,
             onDestinationSelected: (newIndex) {
               setState(() {
                 selectedIndex = newIndex;

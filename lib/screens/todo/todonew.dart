@@ -1,23 +1,22 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:io';
+
+import 'package:audioplayers/audioplayers.dart' as audioplayer;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:record/record.dart';
+import 'package:uuid/uuid.dart';
 
-class Note {
-  final String title;
-  final String description;
-  final DateTime timestamp;
-  final String audioPath;
-  bool isPlaying; // Track the playing state
+import '../../models/notes.dart';
 
-  Note({
-    required this.title,
-    required this.description,
-    required this.timestamp,
-    required this.audioPath,
-    this.isPlaying = false, // Default to false
-  });
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(AllView2());
 }
 
 class AllView2 extends StatefulWidget {
@@ -27,18 +26,17 @@ class AllView2 extends StatefulWidget {
 }
 
 class _AllView2State extends State<AllView2> {
-  late Record audioRecord;
-  late AudioPlayer audioPlayer;
-  String audioPath = '';
-  List<Note> notes = [];
-  bool isPlaying = false;
-  int? currentlyPlayingIndex; // Track the index of the currently playing note
   bool isRecording = false;
   bool hasRecorded = false;
+  late Record audioRecord;
+  late audioplayer.AudioPlayer audioPlayer;
+  String audioPath = '';
+  bool isLoading = false;
+  bool isPlaying = false;
   @override
   void initState() {
     audioRecord = Record();
-    audioPlayer = AudioPlayer();
+    audioPlayer = audioplayer.AudioPlayer(); // Initialize Firebase
     super.initState();
   }
 
@@ -74,138 +72,175 @@ class _AllView2State extends State<AllView2> {
     }
   }
 
-  Future<void> playRecording(String path, int index) async {
+  Future<void> playRecording(String path) async {
     try {
-      if (currentlyPlayingIndex != null && currentlyPlayingIndex != index) {
-        // Stop the previously playing note if any
-        await audioPlayer.stop();
+      audioplayer.Source audioUri = audioplayer.UrlSource(path);
+      setState(() {
+        isPlaying = true;
+      });
+      audioPlayer.play(audioUri);
+      audioPlayer.onPlayerComplete.listen((event) {
+        // Execute the onComplete function when playback completes
         setState(() {
-          // Update the UI for the previously playing note
-          notes[currentlyPlayingIndex!].isPlaying = false;
           isPlaying = false;
         });
-      }
-      Source dataSource = UrlSource(path);
-      // Start or resume playback
-      if (!notes[index].isPlaying) {
-        await audioPlayer.play(dataSource);
 
-        audioPlayer.onPlayerComplete.listen((event) {
-          setState(() {
-            notes[index].isPlaying = false;
-            isPlaying = false;
-          });
-        });
-        setState(() {
-          notes[index].isPlaying = true;
-          isPlaying = true;
-          currentlyPlayingIndex = index;
-        });
-      } else {
-        await audioPlayer.pause();
-        setState(() {
-          notes[index].isPlaying = false;
-          isPlaying = false;
-        });
-      }
+        // Dispose the AudioPlayer instance to release resources
+        audioPlayer.dispose();
+      });
     } catch (e) {
-      print('Error playing recording: $e');
+      throw ("Error : $e");
+    }
+  }
+
+  Future<void> uploadRecording(
+      String audioPath, String title, String description) async {
+    try {
+      String downloadUrl = '';
+      if (audioPath.isNotEmpty) {
+        File audioFile = File(audioPath);
+        String fileName =
+            DateTime.now().millisecondsSinceEpoch.toString(); // Unique filename
+        firebase_storage.Reference ref = firebase_storage
+            .FirebaseStorage.instance
+            .ref()
+            .child('recordings')
+            .child(FirebaseAuth.instance.currentUser!.uid)
+            .child(
+                '$fileName.wav'); // Change the extension according to your audio format
+        await ref.putFile(audioFile);
+        downloadUrl = await ref.getDownloadURL();
+      }
+      setState(() {});
+
+      String id = Uuid().v4();
+      // Create a Note object with the download URL
+      Note newNote = Note(
+        uid: FirebaseAuth.instance.currentUser!.uid,
+        title: title,
+        description: description,
+        timestamp: Timestamp.now(),
+        audioPath: downloadUrl,
+        id: id,
+      );
+
+      // Store the Note object in Firestore
+      await FirebaseFirestore.instance.collection('notes').add({
+        'title': newNote.title,
+        'description': newNote.description,
+        'timestamp': newNote.timestamp,
+        'audioPath': newNote.audioPath,
+        'userid': FirebaseAuth.instance.currentUser!.uid,
+        'id': id
+      });
+    } catch (e) {
+      print('Error uploading recording: $e');
+      // Handle error
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Notes',
-                style: GoogleFonts.getFont('Poppins',
-                    color: Colors.black, fontSize: 30),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: notes.length,
+      body: StreamBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                final note = notes[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        note.title,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 30,
+                final note = Note.fromSnap(snapshot.data!.docs[index]);
+                String date =
+                    DateFormat('MMMM').format(note.timestamp.toDate()) +
+                        ' ' +
+                        note.timestamp.toDate().day.toString() +
+                        ', ' +
+                        note.timestamp.toDate().year.toString();
+                return Dismissible(
+                  key: UniqueKey(), // Unique key for each Dismissible widget
+                  onDismissed: (direction) {},
+                  background: Container(
+                    color: Colors.red, // Background color when swiping
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
                         ),
                       ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            note.description,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                          if (note.audioPath.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  await playRecording(note.audioPath, index);
-                                },
-                                icon: Icon(note.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow),
-                                label: Text(note.isPlaying ? 'Pause' : 'Play'),
-                              ),
-                            ),
-                          // Display URL if audioPath is not empty
-                          if (note.audioPath.isNotEmpty)
-                            Text(
-                              "Recording URL: ${(note.audioPath)}",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 16,
-                              ),
-                            ),
-                        ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black, width: 1),
                       ),
-                      trailing: Text(
-                        DateFormat('MMM dd, yyyy').format(note.timestamp),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                      child: ListTile(
+                        title: Text(
+                          note.title,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 30,
+                          ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              note.description,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                            if (note.audioPath.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await playRecording(note.audioPath);
+                                  },
+                                  child: (isPlaying)
+                                      ? Icon(Icons.pause)
+                                      : Icon(Icons.play_arrow),
+                                ),
+                              ),
+                            // Display URL if audioPath is not empty
+                          ],
+                        ),
+                        trailing: Text(
+                          date,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 );
-              },
-            ),
-          ),
-        ],
+              });
+        },
+        stream: FirebaseFirestore.instance
+            .collection('notes')
+            .where('userid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          hasRecorded = false;
           _addNote(context); // Add note while recording
         },
-        child: Icon(Icons.add),
+        child: const Icon(Iconsax.add),
       ),
     );
   }
@@ -309,18 +344,9 @@ class _AllView2State extends State<AllView2> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   if (_addnoteKey.currentState!.validate()) {
-                                    Note newNote = Note(
-                                      title: title,
-                                      description: description,
-                                      timestamp: DateTime.now(),
-                                      audioPath: hasRecorded ? audioPath : '',
-                                    );
-
-                                    setState(() {
-                                      notes.add(newNote);
-                                    });
-
-                                    stopRecording(); // Stop recording
+                                    stopRecording();
+                                    uploadRecording(audioPath, title,
+                                        description); // Stop recording
                                     Navigator.pop(context);
                                   } else {}
 

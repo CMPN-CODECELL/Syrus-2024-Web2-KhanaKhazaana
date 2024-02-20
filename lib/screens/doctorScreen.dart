@@ -162,75 +162,86 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: (isLoading)
-              ? Center(
-                  child: const CircularProgressIndicator(
-                    color: Colors.blue,
-                  ),
-                )
-              : Column(
-                  children: [
-                    Column(
-                      children: [
-                        (!user.doctorPhoto.isEmpty)
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircleAvatar(
-                                  radius: 64,
-                                  backgroundImage:
-                                      NetworkImage(user.doctorPhoto),
-                                ),
-                              )
-                            : Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Stack(
-                                      children: [
-                                        img != null
-                                            ? CircleAvatar(
-                                                radius: 64,
-                                                backgroundImage:
-                                                    MemoryImage(img!),
-                                              )
-                                            : CircleAvatar(
-                                                radius: 64,
-                                                backgroundImage: NetworkImage(
-                                                    'https://randomuser.me/api/portraits/lego/5.jpg'),
-                                              ),
-                                        Positioned(
-                                            bottom: 0,
-                                            right: 0,
-                                            child: CircleAvatar(
-                                                radius: 20,
-                                                backgroundColor: Colors.blue,
-                                                child: IconButton(
-                                                  icon: Icon(
-                                                    Icons.add_a_photo_rounded,
-                                                    size: 20,
-                                                    color: Colors.white,
-                                                  ),
-                                                  onPressed: _selectImage,
-                                                )))
-                                      ],
-                                    ),
+    return SingleChildScrollView(
+      child: Center(
+        child: (isLoading)
+            ? Center(
+                child: const CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              )
+            : Column(
+                children: [
+                  Column(
+                    children: [
+                      (user.doctorPhoto.isEmpty)
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircleAvatar(
+                                radius: 64,
+                                backgroundImage: NetworkImage(user.doctorPhoto),
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Stack(
+                                    children: [
+                                      img != null
+                                          ? CircleAvatar(
+                                              radius: 64,
+                                              backgroundImage:
+                                                  MemoryImage(img!),
+                                            )
+                                          : CircleAvatar(
+                                              radius: 64,
+                                              backgroundImage: NetworkImage(
+                                                  'https://randomuser.me/api/portraits/lego/5.jpg'),
+                                            ),
+                                      Positioned(
+                                          bottom: 0,
+                                          right: 0,
+                                          child: CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: Colors.blue,
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.add_a_photo_rounded,
+                                                  size: 20,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: _selectImage,
+                                              )))
+                                    ],
                                   ),
-                                  CustomTextButton(
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: CustomTextButton(
+                                      color: Colors.purple,
                                       buttonTitle: 'Upload Photo',
                                       callback: () {
-                                        uploadImage();
-                                      })
-                                ],
-                              ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Material(
-                            elevation: 4,
-                            borderRadius: BorderRadius.circular(30),
-                            color: Colors.purple[100],
+                                        if (img == null) {
+                                          displaySnackbar(
+                                              context: context,
+                                              content: 'Select a photo!!');
+                                        } else {
+                                          uploadImage();
+                                        }
+                                      }),
+                                )
+                              ],
+                            ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          elevation: 4,
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.purple[100],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
                                 Padding(
@@ -239,9 +250,12 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       'Doctor name : ' + user.doctorName,
-                                      style: GoogleFonts.getFont('Poppins',
+                                      style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w400),
+                                      // style: GoogleFonts.getFont('Open Sans',
+                                      //     fontSize: 20,
+                                      //     fontWeight: FontWeight.w400),
                                     ),
                                   ),
                                 ),
@@ -251,9 +265,12 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       'Doctor address : ' + user.doctorAddress,
-                                      style: GoogleFonts.getFont('Poppins',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w400),
+                                      // style: GoogleFonts.getFont('Open Sans',
+                                      //     fontSize: 20,
+                                      //     fontWeight: FontWeight.w400),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 20),
                                     ),
                                   ),
                                 ),
@@ -263,8 +280,11 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       'Doctor phone : ' + user.doctorPhone,
-                                      style: GoogleFonts.getFont('Poppins',
-                                          fontSize: 20,
+                                      // style: GoogleFonts.getFont('Open Sans',
+                                      //     fontSize: 20,
+                                      //     fontWeight: FontWeight.w400),
+                                      style: TextStyle(
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ),
@@ -273,41 +293,41 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    Container(height: 150, child: MedicineList()),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Services near you',
-                          style: GoogleFonts.getFont('Open Sans',
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
+                      ),
+                    ],
+                  ),
+                  Container(height: 150, child: MedicineList()),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Services near you',
+                        style: GoogleFonts.getFont('Open Sans',
+                            fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                     ),
-                    Container(
-                      height: 150,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: serviceNames.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ServiceCard(
-                                callback: () {
-                                  redirectToURL(query: serviceNames[index]);
-                                },
-                                serviceTitle: serviceNames[index],
-                                serviceImage: serviceImage[index],
-                              ),
-                            );
-                          }),
-                    )
-                  ],
-                ),
-        ),
+                  ),
+                  Container(
+                    height: 150,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: serviceNames.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ServiceCard(
+                              callback: () {
+                                redirectToURL(query: serviceNames[index]);
+                              },
+                              serviceTitle: serviceNames[index],
+                              serviceImage: serviceImage[index],
+                            ),
+                          );
+                        }),
+                  )
+                ],
+              ),
       ),
     );
   }
