@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -10,9 +11,11 @@ class Note {
   final String description;
   final DateTime timestamp;
   final String audioPath;
+  final String uid;
 
   Note({
     required this.title,
+    required this.uid,
     required this.description,
     required this.timestamp,
     required this.audioPath,
@@ -312,6 +315,8 @@ class _AllViewState extends State<AllView> {
                                 onPressed: () {
                                   if (_addnoteKey.currentState!.validate()) {
                                     Note newNote = Note(
+                                      uid: FirebaseAuth
+                                          .instance.currentUser!.uid,
                                       title: title,
                                       description: description,
                                       timestamp: DateTime.now(),
