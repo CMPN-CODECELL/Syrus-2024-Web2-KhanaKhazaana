@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:syrus24/routes.dart';
-import 'package:syrus24/screens/auth/exportAuth.dart';
+import 'package:syrus24/screens/auth/signUpScreen.dart';
 import 'package:syrus24/screens/home/exportHomeScreen.dart';
 
 Future<void> main() async {
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
               ),
             );
           }
-          return MyPhone();
+          return SignUpScreen();
         },
       ),
       onGenerateRoute: (settings) => getRoutes(settings),

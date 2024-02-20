@@ -154,8 +154,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                               onPressed: nextPage,
                               child: Text(
                                 (currentIndex == 4) ? 'Done' : 'Next',
-                                style: const TextStyle(
-                                    color: Colors.blue, fontSize: 17),
+                                style: TextStyle(
+                                    color: Colors.purple[100], fontSize: 17),
                               )),
                         ),
                       ),
@@ -197,7 +197,7 @@ class _QuestionPageState extends State<QuestionPage> {
         Container(
           padding: const EdgeInsets.all(15),
           decoration: const BoxDecoration(
-            color: Colors.blueAccent,
+            color: Colors.purple,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
@@ -258,7 +258,7 @@ class RadioButton extends StatelessWidget {
         child: Material(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           elevation: 4,
-          color: Colors.blue[300],
+          color: Colors.purple[100],
           child: ListTile(
             title: Text(
               text,

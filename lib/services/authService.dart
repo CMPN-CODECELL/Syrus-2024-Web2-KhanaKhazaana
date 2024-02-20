@@ -132,4 +132,42 @@ class AuthService {
       displaySnackbar(context: context, content: 'Error occurred');
     }
   }
+
+  Future<void> createUser(
+      {required BuildContext context,
+      required String email,
+      required String password}) async {
+    try {
+      await firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+
+      await uploadtodatabase(context: context);
+    } catch (err) {
+      displaySnackbar(context: context, content: 'Error');
+    }
+  }
+
+  Future<void> uploadtodatabase({required BuildContext context}) async {
+    try {
+      String doctorPhoto =
+          'https://firebasestorage.googleapis.com/v0/b/syrus24-91e8e.appspot.com/o/doctorPhoto%2FyiRG9RHrEIXKO6fOQytHeJAHBjD3%2F213bde80-0832-1eca-ab51-e3ae39e63566?alt=media&token=e22c677b-7775-436e-bcf2-e4fd9576bb92';
+      ModelUser user = ModelUser(
+          username: 'aditya',
+          flatnumber: 'flatnumber',
+          doctorAddress: 'doctorAddress',
+          doctorName: 'doctorName',
+          buildingName: 'buildingName',
+          streetName: 'streetName',
+          city: 'city',
+          doctorPhoto: doctorPhoto,
+          doctorPhone: '1234567890',
+          userid: firebaseAuth.currentUser!.uid);
+      await firestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .set(user.toJson());
+    } catch (err) {
+      displaySnackbar(context: context, content: err.toString());
+    }
+  }
 }
