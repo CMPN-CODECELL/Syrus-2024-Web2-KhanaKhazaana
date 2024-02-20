@@ -55,6 +55,11 @@ dependencies:
   record: ^4.4.4
   image_picker: ^1.0.4
   uuid: ^4.3.3
+  contacts_service: ^0.6.2
+  permission_handler: ^10.2.0
+
+  http: ^1.2.0
+
 
 dev_dependencies:
   flutter_test:
