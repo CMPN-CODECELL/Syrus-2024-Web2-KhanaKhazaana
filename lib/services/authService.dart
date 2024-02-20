@@ -61,14 +61,14 @@ class AuthService {
     }
   }
 
-  Future<void> uploadUserDetails(
-      {required String username,
-      required BuildContext context,
-      required String buildingName,
-      required String flatnumber,
-      required String streetName,
-      required String city,
-      required String pincode}) async {
+  Future<void> uploadUserDetails({
+    required String username,
+    required BuildContext context,
+    required String buildingName,
+    required String flatnumber,
+    required String streetName,
+    required String city,
+  }) async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     User user = firebaseAuth.currentUser!;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -79,7 +79,6 @@ class AuthService {
         'buildingName': buildingName,
         'streetName': streetName,
         'city': city,
-        'pincode': pincode,
       });
     } catch (err) {
       displaySnackbar(context: context, content: 'Error occurred');

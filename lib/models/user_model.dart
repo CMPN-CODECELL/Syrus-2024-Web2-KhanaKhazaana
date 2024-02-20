@@ -6,7 +6,6 @@ class ModelUser {
   final String buildingName;
   final String streetName;
   final String city;
-  final String pincode;
   final String uid;
   final String doctorName;
   final String doctorAddress;
@@ -19,7 +18,6 @@ class ModelUser {
       required this.buildingName,
       required this.streetName,
       required this.city,
-      required this.pincode,
       required this.uid});
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +26,6 @@ class ModelUser {
         'buildingName': buildingName,
         'streetName': streetName,
         'city': city,
-        'pincode': pincode,
         'uid': uid,
         'doctorName': doctorName,
         'doctorAddress': doctorAddress
@@ -45,7 +42,6 @@ class ModelUser {
         buildingName: snapshot['buildingName'],
         streetName: snapshot['streetName'],
         city: snapshot['city'],
-        pincode: snapshot['pincode'],
         uid: snapshot['uid']);
   }
 }
