@@ -6,9 +6,11 @@ class ModelUser {
   final String buildingName;
   final String streetName;
   final String city;
-  final String uid;
+  final String userid;
   final String doctorName;
   final String doctorAddress;
+  final String doctorPhoto;
+  final String doctorPhone;
 
   ModelUser(
       {required this.username,
@@ -18,7 +20,9 @@ class ModelUser {
       required this.buildingName,
       required this.streetName,
       required this.city,
-      required this.uid});
+      required this.doctorPhoto,
+      required this.doctorPhone,
+      required this.userid});
 
   Map<String, dynamic> toJson() => {
         'username': username,
@@ -26,9 +30,11 @@ class ModelUser {
         'buildingName': buildingName,
         'streetName': streetName,
         'city': city,
-        'uid': uid,
+        'userid': userid,
+        'doctorPhoto': doctorPhoto,
         'doctorName': doctorName,
-        'doctorAddress': doctorAddress
+        'doctorAddress': doctorAddress,
+        'doctorPhone': doctorPhone
       };
 
   static ModelUser fromSnap(DocumentSnapshot snap) {
@@ -36,12 +42,14 @@ class ModelUser {
 
     return ModelUser(
         doctorName: snapshot['doctorName'],
+        doctorPhoto: snapshot['doctorPhoto'] ?? '',
         doctorAddress: snapshot['doctorAddress'],
         username: snapshot['username'],
         flatnumber: snapshot['flatnumber'],
         buildingName: snapshot['buildingName'],
+        doctorPhone: snapshot['doctorPhone'] ?? '',
         streetName: snapshot['streetName'],
         city: snapshot['city'],
-        uid: snapshot['uid']);
+        userid: snapshot['userid']);
   }
 }

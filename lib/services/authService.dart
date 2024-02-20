@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syrus24/constants.dart';
 
+import '../models/user_model.dart';
 import '../screens/Questionnaire/exportQuestionaire.dart';
 import '../screens/auth/exportAuth.dart';
+import 'uploadFiletoStorage.dart';
 
 class AuthService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -52,10 +56,11 @@ class AuthService {
       {required BuildContext context, required String phoneNumber}) async {
     User? user = firebaseAuth.currentUser!;
     try {
-      await firestore
-          .collection('users')
-          .doc(user.uid)
-          .set({"userid": user.uid, "phoneNumber": AuthService.phoneNumber});
+      await firestore.collection('users').doc(user.uid).set({
+        "userid": user.uid,
+        "phoneNumber": AuthService.phoneNumber,
+        "doctorPhoto": ""
+      });
     } catch (err) {
       displaySnackbar(context: context, content: 'Some error occurred');
     }
@@ -85,19 +90,44 @@ class AuthService {
     }
   }
 
-  Future<void> uploadUserDoctorDetails({
-    required String doctorName,
-    required BuildContext context,
-    required String doctorAddress,
-  }) async {
+  Future<void> uploadUserDoctorDetails(
+      {required String doctorName,
+      required BuildContext context,
+      required String doctorAddress,
+      required String doctorPhone}) async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     User user = firebaseAuth.currentUser!;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
+      await firestore.collection('users').doc(user.uid).update({
+        'doctorName': doctorName,
+        'doctorAddress': doctorAddress,
+        "doctorPhone": doctorPhone
+      });
+    } catch (err) {
+      displaySnackbar(context: context, content: 'Error occurred');
+    }
+  }
+
+  Future<ModelUser> getUserDetails() async {
+    User currentUser = firebaseAuth.currentUser!;
+    DocumentSnapshot snap =
+        await firestore.collection('users').doc(currentUser.uid).get();
+    return ModelUser.fromSnap(snap);
+  }
+
+  Future<void> uploadDoctorPhoto(
+      {required BuildContext context, required Uint8List imagefile}) async {
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    User user = firebaseAuth.currentUser!;
+    try {
+      String photoUrl =
+          await FileStorage().uploadImage('doctorPhoto', imagefile);
+
       await firestore
           .collection('users')
           .doc(user.uid)
-          .update({'doctorName': doctorName, 'doctorAddress': doctorAddress});
+          .update({"doctorPhoto": photoUrl});
     } catch (err) {
       displaySnackbar(context: context, content: 'Error occurred');
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syrus24/screens/doctorScreen.dart';
 import 'package:syrus24/screens/essentials/essentialsScreen.dart';
 import 'package:syrus24/screens/userinfo/exportUserinfo.dart';
 
@@ -36,6 +37,10 @@ Route getRoutes(RouteSettings routeSettings) {
     case EssentialScreen.routeName:
       return MaterialPageRoute(builder: (context) {
         return EssentialScreen();
+      });
+    case MyDoctorScreen.routeName:
+      return MaterialPageRoute(builder: (context) {
+        return MyDoctorScreen();
       });
     default:
       return MaterialPageRoute(builder: (context) {

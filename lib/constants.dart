@@ -105,7 +105,7 @@ class LocationService {
 
   Future<void> shareLocationWithEmergencyContacts() async {
     // Simulated emergency contacts
-    List<String> emergencyContacts = ['7972563663', '9324309587'];
+    List<String> emergencyContacts = ['8591870313', '9324309587'];
 
     // Get user's current location
     Position position = await Geolocator.getCurrentPosition();
@@ -138,3 +138,15 @@ class LocationService {
     });
   }
 }
+
+List<String> serviceNames = [
+  "Hospitals",
+  "Pathology Labs",
+  "Chemists",
+];
+
+List<String> serviceImage = [
+  'assets/hospital.jpg',
+  'assets/pathology.jpg',
+  'assets/pharmacy.jpg',
+];

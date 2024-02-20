@@ -170,6 +170,8 @@ class _GetDoctorDetailsState extends State<GetDoctorDetails> {
   final TextEditingController _doctorNameController = TextEditingController();
   final TextEditingController _doctorAddressController =
       TextEditingController();
+  final TextEditingController _doctorPhoneController = TextEditingController();
+
   bool isLoading = false;
   void uploadDoctorDetailstoFirebase() async {
     setState(() {
@@ -178,6 +180,7 @@ class _GetDoctorDetailsState extends State<GetDoctorDetails> {
     await AuthService().uploadUserDoctorDetails(
         doctorName: _doctorNameController.text.trim(),
         context: context,
+        doctorPhone: _doctorPhoneController.text.trim(),
         doctorAddress: _doctorAddressController.text.trim());
     setState(() {
       isLoading = false;
@@ -219,6 +222,12 @@ class _GetDoctorDetailsState extends State<GetDoctorDetails> {
                     hintText: '123 Fake Street',
                     keyboardtype: TextInputType.name,
                     label: 'Doctor\'s address',
+                  ),
+                  CustomTextInputField(
+                    controller: _doctorPhoneController,
+                    hintText: '1234567890',
+                    keyboardtype: TextInputType.number,
+                    label: 'Doctor\'s Phone',
                   ),
                   CustomTextButton(
                     buttonTitle: 'Submit',

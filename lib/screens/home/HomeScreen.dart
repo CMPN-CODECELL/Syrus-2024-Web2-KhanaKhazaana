@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:syrus24/screens/auth/exportAuth.dart';
 
 import '../../ReminderService.dart';
 import '../../constants.dart';
@@ -88,12 +90,27 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void signOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacementNamed(MyPhone.routeName);
+  }
+
   int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                signOut();
+              },
+              icon: Icon(
+                Iconsax.logout,
+                color: Colors.white,
+              ))
+        ],
         title: Text(
           'YaadonKiBaarat',
           style: GoogleFonts.getFont('Cabin',
