@@ -51,8 +51,7 @@ class _PostCardState extends State<PostCard> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(25)),
                     image: DecorationImage(
-                        image: NetworkImage(
-                            'https://randomuser.me/api/portraits/lego/5.jpg'),
+                        image: NetworkImage(widget.snap['postUrl']),
                         // image: NetworkImage(widget.snap['postUrl']),
                         fit: BoxFit.fitWidth)),
               ),

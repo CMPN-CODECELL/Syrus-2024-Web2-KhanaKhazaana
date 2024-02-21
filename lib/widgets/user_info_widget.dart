@@ -22,7 +22,7 @@ Padding buildUserInfo() {
             fontSize: 16,
           ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 5),
         Text(
           "Address: 1234 Memory Lane, Alzheimer's City",
           style: TextStyle(
@@ -30,7 +30,7 @@ Padding buildUserInfo() {
             fontSize: 16,
           ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 5),
         Text(
           "Contact: +1 (555) 123-4567",
           style: TextStyle(
@@ -38,7 +38,7 @@ Padding buildUserInfo() {
             fontSize: 16,
           ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 5),
         Text(
           "Emergency Contact: Jane Doe (+1 (555) 987-6543)",
           style: TextStyle(

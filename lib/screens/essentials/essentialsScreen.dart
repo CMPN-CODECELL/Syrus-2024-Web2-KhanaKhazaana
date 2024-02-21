@@ -72,184 +72,205 @@ class _EssentialScreenState extends State<EssentialScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      color: Colors.deepPurple[200],
+      decoration: BoxDecoration(
+        color: Colors.deepPurple[200],
+      ),
       child: Padding(
-        padding: EdgeInsets.all(25.0),
+        padding: EdgeInsets.all(15.0),
         child: ListView(
           children: [
-            //greetings row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Hi, Parth!',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            'Hi, ${user.username}!',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('23 Jan,2021',
+                              style: TextStyle(color: Colors.white)),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text('23 Jan,2021', style: TextStyle(color: Colors.white))
+                    //notification
+                    Tooltip(
+                      message: 'Share your location',
+                      child: TextButton(
+                        onPressed: () {
+                          _locationService.shareLocationWithEmergencyContacts(
+                              context: context, username: user.username);
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.deepPurple[600],
+                                borderRadius: BorderRadius.circular(12)),
+                            padding: EdgeInsets.all(12),
+                            child: Icon(
+                              Iconsax.gps,
+                              color: Colors.white,
+                            )),
+                      ),
+                    )
                   ],
                 ),
-                //notification
-                Tooltip(
-                  message: 'Share your location',
-                  child: TextButton(
-                    onPressed: () {
-                      _locationService.shareLocationWithEmergencyContacts(
-                          context: context, username: user.username);
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.deepPurple[600],
-                            borderRadius: BorderRadius.circular(12)),
-                        padding: EdgeInsets.all(12),
-                        child: Icon(
-                          Iconsax.gps,
-                          color: Colors.white,
-                        )),
+                Container(
+                  height: 100,
+                  margin: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, FirstGameScreen.routeName);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.deepPurple[600],
+                                borderRadius: BorderRadius.circular(12)),
+                            margin: EdgeInsets.only(right: 5),
+                            child: Center(
+                                child: Text(
+                              'Game 1',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, LetterClickGameScreen.routeName);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(left: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.deepPurple[600],
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Center(
+                                child: Text(
+                              'Game 2',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 5,
+                ),
               ],
             ),
-            SizedBox(
-              height: 25,
-            ),
+
             //search bar
-            Container(
-              height: 100,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+
+            //How do you feel
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, FirstGameScreen.routeName);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.deepPurple[600],
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: EdgeInsets.all(12),
-                      child: Center(
-                          child: Text(
-                        'Game 1',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'How do you feel?',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Icon(
+                        Icons.more_horiz,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, LetterClickGameScreen.routeName);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.deepPurple[600],
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: EdgeInsets.all(12),
-                      child: Center(
-                          child: Text(
-                        'Game 2',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  //4 different faces
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          EmoticonFace(emoticonFace: '😔'),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'bad',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          EmoticonFace(emoticonFace: '🙂'),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'fine',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          EmoticonFace(emoticonFace: '😊'),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'well',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          EmoticonFace(emoticonFace: '🥳'),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Excellent',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
 
             SizedBox(
-              height: 25,
-            ),
-
-            //How do you feel
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'How do you feel?',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-                Icon(
-                  Icons.more_horiz,
-                  color: Colors.white,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            //4 different faces
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    EmoticonFace(emoticonFace: '😔'),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'bad',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    EmoticonFace(emoticonFace: '🙂'),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'fine',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    EmoticonFace(emoticonFace: '😊'),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'well',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    EmoticonFace(emoticonFace: '🥳'),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Excellent',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
               height: 24,
             ),
-            Personal_Info(size: size),
+            Personal_Info(size: size, user: user),
             buildUserEvents(size),
             GalleryScreen()
           ],

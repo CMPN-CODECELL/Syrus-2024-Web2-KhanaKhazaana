@@ -177,7 +177,7 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                 children: [
                   Column(
                     children: [
-                      (user.doctorPhoto.isEmpty)
+                      (!user.doctorPhoto.isEmpty)
                           ? Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(

@@ -232,7 +232,7 @@ class _LetterClickGameScreenState extends State<LetterClickGameScreen> {
                   onTap: () => _onLetterClicked(letter),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.purpleAccent, // Change color
+                      color: Colors.deepPurple, // Change color
                       border:
                           Border.all(color: Colors.white), // Add border color
                       borderRadius: BorderRadius.circular(8),
@@ -259,11 +259,11 @@ class _LetterClickGameScreenState extends State<LetterClickGameScreen> {
                   Icon(
                     Icons.replay,
                     size: 70,
-                    color: Colors.purpleAccent, // Change icon color
+                    color: Colors.deepPurple, // Change icon color
                   ),
                   Text('GET NEW LIST',
                       style: TextStyle(
-                          color: Colors.purpleAccent,
+                          color: Colors.deepPurple,
                           fontSize: 15,
                           fontWeight: FontWeight.w900,
                           fontFamily: 'CabinSketch')), // Change text color
