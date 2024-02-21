@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             destinations: [
               NavigationItem(text: 'Home', icon: (Iconsax.home)),
-              NavigationItem(text: 'Essentials', icon: (Iconsax.activity)),
+              NavigationItem(text: 'To-do', icon: (Iconsax.note)),
               NavigationItem(text: 'My Doctor', icon: (Iconsax.health)),
               NavigationItem(text: 'Community', icon: (Iconsax.people)),
             ],
@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: pages[selectedIndex],
-      extendBody: (selectedIndex == 3 || selectedIndex == 0) ? false : true,
+      extendBody: (selectedIndex == 3 || selectedIndex == 1) ? false : true,
     );
   }
 }

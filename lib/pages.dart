@@ -5,8 +5,8 @@ import 'package:syrus24/screens/essentials/essentialsScreen.dart';
 import 'package:syrus24/screens/todo/todonew.dart';
 
 List<Widget> pages = [
-  AllView2(),
   EssentialScreen(),
+  AllView2(),
   MyDoctorScreen(),
   CommunityScreen(),
 ];

@@ -98,20 +98,23 @@ class _EssentialScreenState extends State<EssentialScreen> {
                   ],
                 ),
                 //notification
-                TextButton(
-                  onPressed: () {
-                    _locationService.shareLocationWithEmergencyContacts(
-                        context: context, username: user.username);
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.deepPurple[600],
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: EdgeInsets.all(12),
-                      child: Icon(
-                        Iconsax.gps,
-                        color: Colors.white,
-                      )),
+                Tooltip(
+                  message: 'Share your location',
+                  child: TextButton(
+                    onPressed: () {
+                      _locationService.shareLocationWithEmergencyContacts(
+                          context: context, username: user.username);
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.deepPurple[600],
+                            borderRadius: BorderRadius.circular(12)),
+                        padding: EdgeInsets.all(12),
+                        child: Icon(
+                          Iconsax.gps,
+                          color: Colors.white,
+                        )),
+                  ),
                 )
               ],
             ),
