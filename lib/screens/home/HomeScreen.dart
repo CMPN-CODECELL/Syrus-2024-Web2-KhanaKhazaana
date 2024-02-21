@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: pages[selectedIndex],
-      extendBody: (selectedIndex == 3) ? false : true,
+      extendBody: (selectedIndex == 3 || selectedIndex == 0) ? false : true,
     );
   }
 }
