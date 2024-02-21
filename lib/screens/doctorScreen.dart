@@ -60,6 +60,15 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
     setState(() {});
   }
 
+  void _launchPhone() async {
+    const phoneNumber = 'tel:+1234567890'; // Replace with your phone number
+    if (await canLaunchUrl(Uri.parse(phoneNumber))) {
+      await canLaunchUrl(Uri.parse(phoneNumber));
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
   void redirectToURL({required String query}) async {
     setState(() {
       _isLoading = true;

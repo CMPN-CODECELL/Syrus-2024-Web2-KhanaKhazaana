@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syrus24/games/firstGame.dart';
 import 'package:syrus24/games/secondGame.dart';
+import 'package:syrus24/games/thirdGame.dart';
 import 'package:syrus24/models/user_model.dart';
 
 import '../../ReminderService.dart';
@@ -131,44 +132,60 @@ class _EssentialScreenState extends State<EssentialScreen> {
                 Container(
                   height: 100,
                   margin: EdgeInsets.all(10),
-                  child: Row(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, FirstGameScreen.routeName);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.deepPurple[600],
-                                borderRadius: BorderRadius.circular(12)),
-                            margin: EdgeInsets.only(right: 5),
-                            child: Center(
-                                child: Text(
-                              'Game 1',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                          ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, FirstGameScreen.routeName);
+                        },
+                        child: Container(
+                          width: 200,
+                          decoration: BoxDecoration(
+                              color: Colors.deepPurple[600],
+                              borderRadius: BorderRadius.circular(12)),
+                          margin: EdgeInsets.only(right: 5),
+                          child: Center(
+                              child: Text(
+                            'Connect',
+                            style: TextStyle(color: Colors.white),
+                          )),
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, LetterClickGameScreen.routeName);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(left: 5),
-                            decoration: BoxDecoration(
-                                color: Colors.deepPurple[600],
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Center(
-                                child: Text(
-                              'Game 2',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                          ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, LetterClickGameScreen.routeName);
+                        },
+                        child: Container(
+                          width: 200,
+                          margin: EdgeInsets.only(left: 5),
+                          decoration: BoxDecoration(
+                              color: Colors.deepPurple[600],
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                              child: Text(
+                            'Pronounce It',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, QuizPage.routeName);
+                        },
+                        child: Container(
+                          width: 200,
+                          margin: EdgeInsets.only(left: 5),
+                          decoration: BoxDecoration(
+                              color: Colors.deepPurple[600],
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                              child: Text(
+                            'Know Yourself',
+                            style: TextStyle(color: Colors.white),
+                          )),
                         ),
                       ),
                     ],

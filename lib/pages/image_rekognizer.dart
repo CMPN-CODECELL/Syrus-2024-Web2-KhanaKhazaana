@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -29,7 +30,8 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
       _loading = true;
     });
 
-    final url = Uri.parse('https://4d64-115-98-232-52.ngrok-free.app/predict');
+    final url = Uri.parse(
+        'https://6642-2409-40c0-1c-5b20-b4dd-a2f3-a5d4-9d02.ngrok-free.app/predict');
     final request = http.MultipartRequest('POST', url)
       ..fields['save_txt'] = 'T'
       ..files.add(await http.MultipartFile.fromPath('myfile', _image!.path));
@@ -47,6 +49,31 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
         _result = 'Error: $e';
         _loading = false;
       });
+    }
+  }
+
+  Widget _buildRecognitionResult() {
+    if (_result != null) {
+      final decodedResult = jsonDecode(_result!);
+      final List<dynamic> results = decodedResult['results'];
+
+      return Column(
+        children: results.map((result) {
+          final String name = result['name'];
+          final double confidence = result['confidence'];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Text(
+              '$name - Confidence: ${confidence.toStringAsFixed(2)}',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            ),
+          );
+        }).toList(),
+      );
+    } else {
+      return SizedBox.shrink();
     }
   }
 
@@ -73,13 +100,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
                       children: [
                         Image.file(_image!),
                         SizedBox(height: 10),
-                        _result != null
-                            ? Text(
-                                _result!,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
-                              )
-                            : SizedBox.shrink(),
+                        _buildRecognitionResult(),
                       ],
                     ),
             ElevatedButton(

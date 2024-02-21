@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syrus24/games/firstGame.dart';
 import 'package:syrus24/games/secondGame.dart';
+import 'package:syrus24/games/thirdGame.dart';
 import 'package:syrus24/screens/chats/chatScreen.dart';
 import 'package:syrus24/screens/community/uploadImagesScreen.dart';
 import 'package:syrus24/screens/doctorScreen.dart';
@@ -61,6 +62,10 @@ Route getRoutes(RouteSettings routeSettings) {
     case LetterClickGameScreen.routeName:
       return MaterialPageRoute(builder: (context) {
         return LetterClickGameScreen();
+      });
+    case QuizPage.routeName:
+      return MaterialPageRoute(builder: (context) {
+        return QuizPage();
       });
     default:
       return MaterialPageRoute(builder: (context) {
