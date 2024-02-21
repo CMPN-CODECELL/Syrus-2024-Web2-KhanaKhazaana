@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "611087595914",
-    "project_id": "syrus24-91e8e",
-    "storage_bucket": "syrus24-91e8e.appspot.com"
+    "project_number": "963326420778",
+    "project_id": "syrus24-cca46",
+    "storage_bucket": "syrus24-cca46.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:611087595914:android:b91f48d4eee50e5b8ff073",
+        "mobilesdk_app_id": "1:963326420778:android:414bcaae82b7357ff76053",
         "android_client_info": {
           "package_name": "com.example.syrus24"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCY4eseucLNdmuvXogtM-TqURXeStEA298"
+          "current_key": "AIzaSyCBFcFYrZYQZ8uPKyuuGFqAu_omfdl7vxM"
         }
       ],
       "services": {

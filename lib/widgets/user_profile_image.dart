@@ -13,8 +13,7 @@ Stack buildUserImage(Size size) {
             shape: BoxShape.circle),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSATP5C4Iti8iYFIwldjqZA3Tz_6efOBTvQCHc8xIL-WQkkLQ&s"),
+          backgroundImage: AssetImage("assets/linto.jpg"),
         ),
       ),
     ],

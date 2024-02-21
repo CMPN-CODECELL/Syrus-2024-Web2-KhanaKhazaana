@@ -33,7 +33,10 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
       city: '',
       doctorPhoto: '',
       userid: '',
-      doctorPhone: '');
+      doctorPhone: '',
+      phoneNumber: '',
+      relationImage: [],
+      relationName: []);
   bool isLoading = false;
   @override
   void initState() {

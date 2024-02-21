@@ -59,6 +59,7 @@ dependencies:
   permission_handler: ^10.2.0
 
   http: ^1.2.0
+  flutter_tts: ^3.8.5
 
 
 dev_dependencies:

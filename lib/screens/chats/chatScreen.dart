@@ -24,7 +24,9 @@ class _ChatScreenState extends State<ChatScreen> {
       doctorPhoto: '',
       doctorPhone: '',
       userid: '',
-      phoneNumber: '');
+      phoneNumber: '',
+      relationImage: [],
+      relationName: []);
   String message = '';
   bool isLoading = false;
   final messagecontroller = TextEditingController();

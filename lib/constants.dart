@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:syrus24/services/sendLocationMessage.dart';
 
 displaySnackbar({required BuildContext context, required String content}) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -12,7 +12,7 @@ displaySnackbar({required BuildContext context, required String content}) {
       style: GoogleFonts.getFont('Lato',
           fontWeight: FontWeight.w800, fontSize: 18),
     ),
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.deepPurple[100],
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(30),
@@ -103,7 +103,8 @@ class LocationService {
     return distance < 100;
   }
 
-  Future<void> shareLocationWithEmergencyContacts() async {
+  Future<void> shareLocationWithEmergencyContacts(
+      {required BuildContext context, required String username}) async {
     // Simulated emergency contacts
     List<String> emergencyContacts = ['8591870313', '9324309587'];
 
@@ -125,11 +126,17 @@ class LocationService {
     String url = "https://wa.me/${emergencyContacts[0]}/?text=$message";
 
     // Launch WhatsApp with pre-filled message
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch WhatsApp.';
-    }
+    // if (await canLaunchUrl(Uri.parse(url))) {
+    //   await launchUrl(Uri.parse(url));
+    // } else {
+    //   throw 'Could not launch WhatsApp.';
+    // }
+    await SendLocation().sendmessage(
+        context: context,
+        lat: position.latitude.toString(),
+        number: '9324309587',
+        lon: position.longitude.toString(),
+        username: username);
   }
 
   void startGeofencing(Function(Position) onEntry) {

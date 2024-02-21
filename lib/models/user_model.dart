@@ -11,9 +11,15 @@ class ModelUser {
   final String doctorAddress;
   final String doctorPhoto;
   final String doctorPhone;
+  final String phoneNumber;
+  final List relationName;
+  final List relationImage;
 
   ModelUser(
       {required this.username,
+      required this.phoneNumber,
+      required this.relationImage,
+      required this.relationName,
       required this.flatnumber,
       required this.doctorAddress,
       required this.doctorName,
@@ -34,7 +40,9 @@ class ModelUser {
         'doctorPhoto': doctorPhoto,
         'doctorName': doctorName,
         'doctorAddress': doctorAddress,
-        'doctorPhone': doctorPhone
+        'doctorPhone': doctorPhone,
+        'relationName': relationName,
+        'relationImage': relationImage
       };
 
   static ModelUser fromSnap(DocumentSnapshot snap) {
@@ -50,6 +58,9 @@ class ModelUser {
         doctorPhone: snapshot['doctorPhone'] ?? '',
         streetName: snapshot['streetName'],
         city: snapshot['city'],
-        userid: snapshot['userid']);
+        userid: snapshot['userid'],
+        phoneNumber: snapshot['phoneNumber'],
+        relationImage: snapshot['relationImage'],
+        relationName: snapshot['relationName']);
   }
 }

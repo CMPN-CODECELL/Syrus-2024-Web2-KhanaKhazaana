@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:record/record.dart';
 import 'package:uuid/uuid.dart';
@@ -141,107 +140,122 @@ class _AllView2State extends State<AllView2> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder(
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-          return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final note = Note.fromSnap(snapshot.data!.docs[index]);
-                String date =
-                    DateFormat('MMMM').format(note.timestamp.toDate()) +
-                        ' ' +
-                        note.timestamp.toDate().day.toString() +
-                        ', ' +
-                        note.timestamp.toDate().year.toString();
-                return Dismissible(
-                  key: UniqueKey(), // Unique key for each Dismissible widget
-                  onDismissed: (direction) {},
-                  background: Container(
-                    color: Colors.red, // Background color when swiping
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black, width: 1),
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          note.title,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 30,
+              return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final note = Note.fromSnap(snapshot.data!.docs[index]);
+                    String date =
+                        DateFormat('MMMM').format(note.timestamp.toDate()) +
+                            ' ' +
+                            note.timestamp.toDate().day.toString() +
+                            ', ' +
+                            note.timestamp.toDate().year.toString();
+                    return Dismissible(
+                      key:
+                          UniqueKey(), // Unique key for each Dismissible widget
+                      onDismissed: (direction) {},
+                      background: Container(
+                        color: Colors.red, // Background color when swiping
+                        child: const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              note.description,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.black, width: 1),
+                          ),
+                          child: ListTile(
+                            title: Text(
+                              note.title,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 30,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  note.description,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                if (note.audioPath.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        await playRecording(note.audioPath);
+                                      },
+                                      child: (isPlaying)
+                                          ? Icon(Icons.pause)
+                                          : Icon(Icons.play_arrow),
+                                    ),
+                                  ),
+                                // Display URL if audioPath is not empty
+                              ],
+                            ),
+                            trailing: Text(
+                              date,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                                fontSize: 15,
                               ),
                             ),
-                            if (note.audioPath.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    await playRecording(note.audioPath);
-                                  },
-                                  child: (isPlaying)
-                                      ? Icon(Icons.pause)
-                                      : Icon(Icons.play_arrow),
-                                ),
-                              ),
-                            // Display URL if audioPath is not empty
-                          ],
-                        ),
-                        trailing: Text(
-                          date,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              });
-        },
-        stream: FirebaseFirestore.instance
-            .collection('notes')
-            .where('userid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .snapshots(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          hasRecorded = false;
-          _addNote(context); // Add note while recording
-        },
-        child: const Icon(Iconsax.add),
-      ),
+                    );
+                  });
+            },
+            stream: FirebaseFirestore.instance
+                .collection('notes')
+                .where('userid',
+                    isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                .snapshots(),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.deepPurple[100]),
+            child: IconButton(
+              onPressed: () {
+                hasRecorded = false;
+                _addNote(context); // Add note while recording
+              },
+              icon: Icon(Icons.add),
+            ),
+          ),
+        )
+      ],
     );
   }
 

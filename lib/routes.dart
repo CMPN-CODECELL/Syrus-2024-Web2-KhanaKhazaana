@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:syrus24/games/firstGame.dart';
+import 'package:syrus24/games/secondGame.dart';
+import 'package:syrus24/screens/chats/chatScreen.dart';
+import 'package:syrus24/screens/community/uploadImagesScreen.dart';
 import 'package:syrus24/screens/doctorScreen.dart';
 import 'package:syrus24/screens/essentials/essentialsScreen.dart';
 import 'package:syrus24/screens/userinfo/exportUserinfo.dart';
@@ -41,6 +45,22 @@ Route getRoutes(RouteSettings routeSettings) {
     case MyDoctorScreen.routeName:
       return MaterialPageRoute(builder: (context) {
         return MyDoctorScreen();
+      });
+    case AddPostScreen.routeName:
+      return MaterialPageRoute(builder: (context) {
+        return AddPostScreen();
+      });
+    case ChatScreen.routeName:
+      return MaterialPageRoute(builder: (context) {
+        return ChatScreen();
+      });
+    case FirstGameScreen.routeName:
+      return MaterialPageRoute(builder: (context) {
+        return FirstGameScreen();
+      });
+    case LetterClickGameScreen.routeName:
+      return MaterialPageRoute(builder: (context) {
+        return LetterClickGameScreen();
       });
     default:
       return MaterialPageRoute(builder: (context) {

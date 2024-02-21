@@ -78,12 +78,16 @@ class AuthService {
     User user = firebaseAuth.currentUser!;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
+      String image =
+          'https://firebasestorage.googleapis.com/v0/b/syrus24-91e8e.appspot.com/o/doctorPhoto%2FyiRG9RHrEIXKO6fOQytHeJAHBjD3%2F213bde80-0832-1eca-ab51-e3ae39e63566?alt=media&token=e22c677b-7775-436e-bcf2-e4fd9576bb92';
       await firestore.collection('users').doc(user.uid).update({
         'username': username,
         'flatnumber': flatnumber,
         'buildingName': buildingName,
         'streetName': streetName,
         'city': city,
+        'relationName': ['aditya', 'linto'],
+        'relationImage': [image, image]
       });
     } catch (err) {
       displaySnackbar(context: context, content: 'Error occurred');
@@ -161,7 +165,10 @@ class AuthService {
           city: 'city',
           doctorPhoto: doctorPhoto,
           doctorPhone: '1234567890',
-          userid: firebaseAuth.currentUser!.uid);
+          userid: firebaseAuth.currentUser!.uid,
+          phoneNumber: '1234567890',
+          relationImage: [],
+          relationName: []);
       await firestore
           .collection('users')
           .doc(firebaseAuth.currentUser!.uid)

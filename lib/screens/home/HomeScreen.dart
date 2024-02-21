@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> isUserAtHome(Position position) async {
     Position position = await determinePosition();
+    if (!context.mounted) {}
     setState(() {
       homeLat = position.latitude;
       homeLong = position.longitude;
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
             (Set<MaterialState> states) =>
                 states.contains(MaterialState.selected)
                     ? GoogleFonts.getFont('Poppins',
-                        color: Colors.black,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 12)
                     : GoogleFonts.getFont(
@@ -164,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: pages[selectedIndex],
+      extendBody: (selectedIndex == 3) ? false : true,
     );
   }
 }
@@ -178,7 +180,7 @@ class NavigationItem extends StatelessWidget {
     return NavigationDestination(
       icon: Icon(
         icon,
-        color: Colors.black,
+        color: Colors.white,
         size: 25,
       ),
       label: text,
